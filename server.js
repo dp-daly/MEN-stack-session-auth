@@ -52,6 +52,16 @@ app.get("/", async (req, res) => {
     });
 });
 
+app.get("/vip-lounge", (req, res) => {
+    //because of the middleware, we'll have a res.session
+    //we can lock down routes just by checking that user object is there (which is only true for those signed in)
+    if (req.session.user) {
+        res.send(`Welcome to the VIP lounge, ${req.session.user.username}.`)
+    } else {
+        res.send("No guests allowed.");
+    }
+})
+
 //Listen for incoming requests
 app.listen(port, () => {
     console.log(`The express app is ready on port ${port}!`)
