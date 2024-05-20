@@ -37,6 +37,15 @@ router.post("/sign-up", async (req, res) => {
     if (req.body.password.length < 8) {
         return res.send("Password must be at least 8 characters long.")
     }
+
+    //use bcrypt to hash the user's password
+    //the value is the 'salt level', e.g. the amount of hashing to do
+    const hashedPassword = bcrypt.hashSync(req.body.password, 10);
+
+    req.body.password = hashedPassword;
+
+    const user = await User.create(req.body);
+    res.send(`Thanks for signing up ${user.username}.`)
 });
 
 module.exports = router;
