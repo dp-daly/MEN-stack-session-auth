@@ -6,6 +6,7 @@ dotenv.config();
 const express = require("express");
 const app = express();
 
+const session = require("express-session");
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const morgan = require("morgan");
@@ -32,7 +33,16 @@ app.use(methodOverride("_method"));
 //Middleware for logging HTTP requests
 app.use(morgan("dev"));
 
-// Use the auth controller for any requests that start with /auth (auth endpoint)
+//Use express session for auth
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET, 
+        resave: false,
+        saveUninitialized: true,
+})
+);
+
+//Use the auth controller for any requests that start with /auth (auth endpoint)
 app.use("/auth", authController);
 
 // GET /
