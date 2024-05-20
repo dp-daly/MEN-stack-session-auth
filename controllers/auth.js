@@ -60,15 +60,19 @@ router.post("/sign-in", async (req, res) => {
     if (!userInDatabase) {
         return res.send("Login failed. Please try again.")
     }
-    
+
     //check pword matches
     const validPassword = bcrypt.compareSync(req.body.password, userInDatabase.password);
 
     if (!validPassword) {
-        return res.send("Login failed. Please try again.")
+        return res.send("Login failed. Please try again.");
     }
 
-    //
+    req.session.user = {
+       username: userInDatabase.username,
+    };
+
+    res.redirect("/");
 })
 
 
